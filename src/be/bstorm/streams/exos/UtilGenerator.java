@@ -1,5 +1,9 @@
 package be.bstorm.streams.exos;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,21 @@ public class UtilGenerator {
         }
 
         return output;
+    }
+
+    public static void enregistrerEmplacementsAleatoires(List<Emplacement> emplacements, String filename) {
+        File fichier = new File(filename);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fichier))) {
+            emplacements.forEach(e -> {
+                try {
+                    writer.write(e.toCSVString() + "\n");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private static Emplacement genererEmplacementAleatoire() {
