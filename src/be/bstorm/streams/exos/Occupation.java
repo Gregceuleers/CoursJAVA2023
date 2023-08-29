@@ -57,4 +57,8 @@ public class Occupation {
                 ", nbOccupants=" + nbOccupants +
                 '}';
     }
+
+    public String toCSVString() {
+        return "{" + id + ";" + dateArrivee + ";" + dateDepart + ";" + nbOccupants + "}";
+    }
 }

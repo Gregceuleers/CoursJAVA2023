@@ -3,6 +3,7 @@ package be.bstorm.streams.exos;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Emplacement {
 
@@ -51,8 +52,8 @@ public class Emplacement {
 
     public boolean verifierOccupation(LocalDate dateDOccupation) {
         return this.occupationList.stream()
-                .anyMatch(o -> (o.getDateArrivee().isAfter(dateDOccupation) || o.getDateArrivee().isEqual(dateDOccupation))
-                        && (o.getDateDepart().isBefore(dateDOccupation) || o.getDateDepart().isEqual(dateDOccupation)));
+                .anyMatch(o -> (o.getDateArrivee().isBefore(dateDOccupation) || o.getDateArrivee().isEqual(dateDOccupation))
+                        && (o.getDateDepart().isAfter(dateDOccupation) || o.getDateDepart().isEqual(dateDOccupation)));
     }
 
 
@@ -77,5 +78,9 @@ public class Emplacement {
                 ", tailleEmplacement=" + tailleEmplacement +
                 ", occupationList=" + occupationList +
                 '}';
+    }
+
+    public String toCSVString() {
+        return numero + ";" + typeEmplacement + ";" + tailleEmplacement + ";[" + occupationList.stream().map(Occupation::toCSVString).collect(Collectors.joining(",")) + "]";
     }
 }
