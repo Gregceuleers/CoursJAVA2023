@@ -1,6 +1,9 @@
 package be.bstorm.streams.exos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Occupation {
@@ -35,6 +38,13 @@ public class Occupation {
         this.nbOccupants = nbOccupants;
     }
 
+    public Occupation(int id, LocalDate dateArrivee, LocalDate dateDepart, int nbOccupants) {
+        this.id = id;
+        this.dateArrivee = dateArrivee;
+        this.dateDepart = dateDepart;
+        this.nbOccupants = nbOccupants;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,5 +70,35 @@ public class Occupation {
 
     public String toCSVString() {
         return "{" + id + ";" + dateArrivee + ";" + dateDepart + ";" + nbOccupants + "}";
+    }
+
+    public static List<Occupation> fromCSVString(String data) {
+        //[{21;2023-07-10;2023-07-16;6},{22;2023-08-20;2023-08-26;1}]
+
+        // On supprime les crochets
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+
+        if (data.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String[] temp = data.split(",");
+
+       return Arrays.stream(temp)
+                .map(s -> {
+                    s = s.replace("{", "");
+                    s = s.replace("}", "");
+                    return s;
+                }) // 21;2023-07-10;2023-07-16;6
+                .map(s -> {
+                    String[] donnees = s.split(";");
+                    return new Occupation(
+                            Integer.parseInt(donnees[0]),
+                           LocalDate.parse(donnees[1]),
+                            LocalDate.parse(donnees[2]),
+                            Integer.parseInt(donnees[3])
+                    );
+                }).toList();
     }
 }

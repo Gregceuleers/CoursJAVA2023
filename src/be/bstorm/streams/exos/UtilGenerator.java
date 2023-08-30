@@ -1,9 +1,6 @@
 package be.bstorm.streams.exos;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +36,19 @@ public class UtilGenerator {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public static List<Emplacement> recupererListeEmplacements(String filename) {
+        File fichier = new File(filename);
+        try (BufferedReader reader = new BufferedReader(new FileReader(fichier))) {
+           return reader.lines()
+                   .map(Emplacement::fromCSVString)
+                   .toList();
+
+        }catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     private static Emplacement genererEmplacementAleatoire() {

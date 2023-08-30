@@ -40,6 +40,13 @@ public class Emplacement {
         this.occupationList = occupationList;
     }
 
+    public Emplacement(int numero, TypeEmplacement typeEmplacement, TailleEmplacement tailleEmplacement, List<Occupation> occupationList) {
+        this.numero = numero;
+        this.typeEmplacement = typeEmplacement;
+        this.tailleEmplacement = tailleEmplacement;
+        this.occupationList = occupationList;
+    }
+
     public double calculerPrixRevientTotal() {
 
         int nombreTotalOccupants = this.occupationList.stream()
@@ -82,5 +89,16 @@ public class Emplacement {
 
     public String toCSVString() {
         return numero + ";" + typeEmplacement + ";" + tailleEmplacement + ";[" + occupationList.stream().map(Occupation::toCSVString).collect(Collectors.joining(",")) + "]";
+    }
+
+    public static Emplacement fromCSVString(String data) {
+        // 5;CARAVANE;M;[{21;2023-07-10;2023-07-16;6},{22;2023-08-20;2023-08-26;1}]
+        String[] donnees = data.split(";", 4);
+        return new Emplacement(
+                Integer.parseInt(donnees[0]),
+                TypeEmplacement.valueOf(donnees[1]),
+                TailleEmplacement.valueOf(donnees[2]),
+                Occupation.fromCSVString(donnees[3])
+        );
     }
 }
